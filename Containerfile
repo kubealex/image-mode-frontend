@@ -1,4 +1,4 @@
-FROM quay.io/kubealex/image-mode-baseos:rhel10.1
+FROM quay.io/kubealex/image-mode-baseos:latest
 
 RUN dnf install -y nodejs npm && dnf clean all
 
