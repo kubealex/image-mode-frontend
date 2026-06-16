@@ -16,6 +16,7 @@ import {
 } from '@patternfly/react-core';
 import BookingForm from './components/BookingForm';
 import TicketList from './components/TicketList';
+import Timetable from './components/Timetable';
 import DatabaseView from './components/DatabaseView';
 import StatusPage from './components/StatusPage';
 
@@ -26,6 +27,7 @@ export default function App() {
     <Nav onSelect={(_e, result) => setActiveItem(result.itemId)} variant="horizontal">
       <NavList>
         <NavItem itemId="book" isActive={activeItem === 'book'}>Book Ticket</NavItem>
+        <NavItem itemId="timetable" isActive={activeItem === 'timetable'}>Timetable</NavItem>
         <NavItem itemId="list" isActive={activeItem === 'list'}>My Tickets</NavItem>
         <NavItem itemId="schema" isActive={activeItem === 'schema'}>Database</NavItem>
         <NavItem itemId="status" isActive={activeItem === 'status'}>Status</NavItem>
@@ -54,6 +56,7 @@ export default function App() {
     <Page masthead={masthead}>
       <PageSection>
         {activeItem === 'book' && <BookingForm />}
+        {activeItem === 'timetable' && <Timetable />}
         {activeItem === 'list' && <TicketList />}
         {activeItem === 'schema' && <DatabaseView />}
         {activeItem === 'status' && <StatusPage />}
