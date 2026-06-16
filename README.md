@@ -40,4 +40,15 @@ If `API_URL` is not set, it defaults to `http://localhost:3001`.
 podman build -t quay.io/kubealex/image-mode-frontend:v1.1 .
 ```
 
+With a custom backend URL baked into the image:
+
+```bash
+podman build --build-arg API_URL=http://backend.example.com:3001 \
+  -t quay.io/kubealex/image-mode-frontend:v1.1 .
+```
+
+| Build ARG | Default | Description |
+|-----------|---------|-------------|
+| `API_URL` | `http://localhost:3001` | Backend API URL for the Vite proxy |
+
 Base image: `quay.io/kubealex/image-mode-baseos:latest`
