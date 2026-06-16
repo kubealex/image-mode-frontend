@@ -1,0 +1,15 @@
+[Unit]
+Description=Train Tickets Frontend (Vite Dev Server)
+After=systemd-tmpfiles-setup.service
+
+[Service]
+Type=simple
+WorkingDirectory=/var/app/frontend
+ExecStart=/usr/bin/npx vite --host
+Restart=on-failure
+RestartSec=5
+
+Environment=API_URL=http://localhost:3001
+
+[Install]
+WantedBy=multi-user.target
