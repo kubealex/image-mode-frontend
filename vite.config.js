@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     host: true,
     proxy: {
-      '/api': process.env.API_URL || 'http://localhost:3001',
+      '/api': `http://${process.env.API_HOST || 'localhost'}:3001`,
     },
   },
 });
