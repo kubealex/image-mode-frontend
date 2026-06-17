@@ -1,6 +1,6 @@
 FROM quay.io/kubealex/image-mode-baseos:latest
 
-ARG API_URL=http://localhost:3001
+ARG API_HOST=localhost
 
 RUN dnf install -y nodejs npm && dnf clean all
 
@@ -12,7 +12,6 @@ COPY src/ /usr/share/train-tickets/frontend/src/
 
 COPY usr/ /usr/
 
-RUN sed -i "s|Environment=API_URL=.*|Environment=API_URL=${API_URL}|" \
-    /usr/lib/systemd/system/train-tickets-frontend.service
+RUN echo "API_HOST=${API_HOST}" > /usr/share/train-tickets/frontend/.env
 
 RUN systemctl enable train-tickets-frontend.service

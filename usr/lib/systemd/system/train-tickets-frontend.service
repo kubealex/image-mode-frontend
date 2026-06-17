@@ -9,7 +9,7 @@ ExecStart=/usr/bin/npx vite --host
 Restart=on-failure
 RestartSec=5
 
-Environment=API_URL=http://localhost:3001
+EnvironmentFile=-/etc/train-tickets/frontend.env
 
 [Install]
 WantedBy=multi-user.target
