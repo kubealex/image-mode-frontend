@@ -12,27 +12,23 @@ React 18 + Vite + PatternFly 6 frontend for the Train Tickets booking applicatio
 
 ## Configuration
 
-The frontend proxies `/api` requests to the backend. Configure the backend URL:
+The frontend proxies `/api` requests to the backend. The backend hostname is read from the `API_HOST` environment variable (default: `localhost`).
 
 ### Container / Image Mode
 
-Create `/etc/train-tickets/frontend.env`:
+The hostname is baked into the image at build time via a `.env` file. To override at runtime, create `/etc/train-tickets/frontend.env`:
 
 ```env
-API_URL=http://backend-hostname:3001
+API_HOST=backend-hostname
 ```
-
-The systemd service reads this file on startup. Values in this file override the defaults.
 
 ### Local Development
 
 ```bash
 cd frontend
 npm install
-API_URL=http://your-backend:3001 npm run dev
+API_HOST=your-backend-host npm run dev
 ```
-
-If `API_URL` is not set, it defaults to `http://localhost:3001`.
 
 ## Build
 
@@ -40,15 +36,15 @@ If `API_URL` is not set, it defaults to `http://localhost:3001`.
 podman build -t quay.io/kubealex/image-mode-frontend:v1.1 .
 ```
 
-With a custom backend URL baked into the image:
+With a custom backend hostname baked into the image:
 
 ```bash
-podman build --build-arg API_URL=http://backend.example.com:3001 \
+podman build --build-arg API_HOST=backend.example.com \
   -t quay.io/kubealex/image-mode-frontend:v1.1 .
 ```
 
 | Build ARG | Default | Description |
 |-----------|---------|-------------|
-| `API_URL` | `http://localhost:3001` | Backend API URL for the Vite proxy |
+| `API_HOST` | `localhost` | Backend API hostname |
 
 Base image: `quay.io/kubealex/image-mode-baseos:latest`
