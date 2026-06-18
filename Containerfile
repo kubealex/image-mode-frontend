@@ -15,3 +15,5 @@ COPY usr/ /usr/
 RUN echo "API_HOST=${API_HOST}" > /usr/share/train-tickets/frontend/.env
 
 RUN systemctl enable train-tickets-frontend.service
+
+RUN firewall-offline-cmd --zone=public --add-port=5173/tcp
