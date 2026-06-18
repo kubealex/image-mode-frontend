@@ -1,10 +1,10 @@
 [Unit]
 Description=Train Tickets Frontend (Vite Dev Server)
-After=systemd-tmpfiles-setup.service
+After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/var/app/frontend
+WorkingDirectory=/usr/share/train-tickets/frontend
 ExecStart=/usr/bin/npx vite --host 0.0.0.0
 Restart=on-failure
 RestartSec=5
