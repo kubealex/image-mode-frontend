@@ -12,7 +12,7 @@ COPY src/ /usr/share/train-tickets/frontend/src/
 
 COPY usr/ /usr/
 
-RUN echo "API_HOST=${API_HOST}" > /usr/share/train-tickets/frontend/.env
+RUN mkdir -p /etc/train-tickets && echo "API_HOST=${API_HOST}" > /etc/train-tickets/frontend.env
 
 RUN systemctl enable train-tickets-frontend.service
 
