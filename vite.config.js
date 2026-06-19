@@ -7,6 +7,7 @@ const domain = hostname.split('.').slice(1).join('.');
 
 export default defineConfig({
   plugins: [react()],
+  cacheDir: '/var/app/frontend/.vite',
   server: {
     host: true,
     allowedHosts: domain ? [hostname, `.${domain}`] : [hostname],
