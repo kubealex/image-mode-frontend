@@ -6,12 +6,17 @@ import {
   CardBody,
   CardTitle,
   Content,
+  DescriptionList,
+  DescriptionListGroup,
+  DescriptionListTerm,
+  DescriptionListDescription,
   Flex,
   FlexItem,
   Icon,
+  Label,
   Spinner,
 } from '@patternfly/react-core';
-import { CheckCircleIcon, ExclamationCircleIcon } from '@patternfly/react-icons';
+import { CheckCircleIcon, ExclamationCircleIcon, ExclamationTriangleIcon } from '@patternfly/react-icons';
 
 const TIERS = [
   { key: 'frontend', name: 'Frontend', description: 'React + Vite' },
@@ -21,9 +26,12 @@ const TIERS = [
 
 export default function StatusPage() {
   const [health, setHealth] = useState(null);
+  const [system, setSystem] = useState(null);
 
-  function checkHealth() {
+  function refresh() {
     setHealth(null);
+    setSystem(null);
+
     fetch('/api/health')
       .then((r) => r.json())
       .then((data) =>
@@ -40,15 +48,76 @@ export default function StatusPage() {
           database: { status: 'error', error: 'Cannot reach backend' },
         })
       );
+
+    fetch('/api/system')
+      .then((r) => r.json())
+      .then(setSystem)
+      .catch(() => setSystem(null));
   }
 
   useEffect(() => {
-    checkHealth();
+    refresh();
   }, []);
 
   return (
     <div>
       <Content component="h2">System Status</Content>
+
+      {system && (
+        <Card style={{ marginBottom: '1.5rem', marginTop: '1rem' }}>
+          <CardHeader>
+            <CardTitle>Image Mode Info</CardTitle>
+          </CardHeader>
+          <CardBody>
+            <DescriptionList isHorizontal>
+              <DescriptionListGroup>
+                <DescriptionListTerm>Operating System</DescriptionListTerm>
+                <DescriptionListDescription>
+                  {system.os?.pretty || 'Unknown'}
+                </DescriptionListDescription>
+              </DescriptionListGroup>
+
+              {system.bootc && (
+                <>
+                  <DescriptionListGroup>
+                    <DescriptionListTerm>Booted Image</DescriptionListTerm>
+                    <DescriptionListDescription>
+                      {system.bootc.image}
+                    </DescriptionListDescription>
+                  </DescriptionListGroup>
+
+                  <DescriptionListGroup>
+                    <DescriptionListTerm>Image Digest</DescriptionListTerm>
+                    <DescriptionListDescription style={{ fontFamily: 'monospace', fontSize: '0.9em' }}>
+                      {system.bootc.imageDigest?.substring(0, 19)}...
+                    </DescriptionListDescription>
+                  </DescriptionListGroup>
+
+                  <DescriptionListGroup>
+                    <DescriptionListTerm>Updates</DescriptionListTerm>
+                    <DescriptionListDescription>
+                      {system.bootc.updateAvailable ? (
+                        <Label color="gold" icon={<ExclamationTriangleIcon />}>Update available</Label>
+                      ) : (
+                        <Label color="green" icon={<CheckCircleIcon />}>Up to date</Label>
+                      )}
+                    </DescriptionListDescription>
+                  </DescriptionListGroup>
+                </>
+              )}
+
+              {!system.bootc && (
+                <DescriptionListGroup>
+                  <DescriptionListTerm>bootc</DescriptionListTerm>
+                  <DescriptionListDescription>
+                    <Label color="grey">Not available</Label>
+                  </DescriptionListDescription>
+                </DescriptionListGroup>
+              )}
+            </DescriptionList>
+          </CardBody>
+        </Card>
+      )}
 
       {!health ? (
         <Spinner aria-label="Checking health" />
@@ -88,7 +157,7 @@ export default function StatusPage() {
             })}
           </Flex>
 
-          <Button variant="secondary" onClick={checkHealth}>Refresh</Button>
+          <Button variant="secondary" onClick={refresh}>Refresh</Button>
         </>
       )}
     </div>
