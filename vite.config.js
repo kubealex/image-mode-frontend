@@ -12,6 +12,10 @@ export default defineConfig({
     host: true,
     allowedHosts: domain ? [hostname, `.${domain}`] : [hostname],
     proxy: {
+      '/bootc-status': {
+        target: 'http://localhost:8005',
+        rewrite: (path) => path.replace(/^\/bootc-status/, '/api/v1/status'),
+      },
       '/api': `http://${process.env.API_HOST || 'localhost'}:3001`,
     },
   },
